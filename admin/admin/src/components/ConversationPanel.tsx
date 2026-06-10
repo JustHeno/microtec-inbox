@@ -7,42 +7,69 @@ type Props = {
   onTake: () => Promise<void>;
   onReply: (message: string) => Promise<void>;
   onClose: () => Promise<void>;
+  onDelete: () => Promise<void>;
 };
 
+function normalizeSource(source?: ConversationSource): ConversationSource {
+  if (!source || source === "web") return "website";
+  return source;
+}
+
 function getSourceLabel(source?: ConversationSource) {
-  if (source === "facebook") return "Messenger Facebook";
-  if (source === "instagram") return "Instagram";
-  if (source === "website") return "Chatbot du site web";
+  const normalized = normalizeSource(source);
+
+  if (normalized === "facebook") return "Messenger Facebook";
+  if (normalized === "instagram") return "Instagram";
+  if (normalized === "website") return "Web / Chatbot du site";
+  if (normalized === "shopify_contact") return "Formulaire Shopify";
+  if (normalized === "email") return "Courriel";
+
   return "Canal inconnu";
 }
 
 function getSourceIcon(source?: ConversationSource) {
-  if (source === "facebook") return "f";
-  if (source === "instagram") return "◎";
-  if (source === "website") return "💬";
+  const normalized = normalizeSource(source);
+
+  if (normalized === "facebook") return "f";
+  if (normalized === "instagram") return "◉";
+  if (normalized === "website") return "🌐";
+  if (normalized === "shopify_contact") return "🛒";
+  if (normalized === "email") return "✉";
+
   return "?";
 }
 
 function getConversationName(conversation: Conversation) {
   if (conversation.customer_name) return conversation.customer_name;
   if (conversation.visitor?.name) return conversation.visitor.name;
-  if (conversation.source === "facebook") return "Client Messenger";
-  if (conversation.source === "instagram") return "Client Instagram";
+
+  const source = normalizeSource(conversation.source);
+
+  if (source === "facebook") return "Client Messenger";
+  if (source === "instagram") return "Client Instagram";
+  if (source === "shopify_contact") return "Client Shopify";
+  if (source === "email") return conversation.visitor?.email || "Contact courriel";
+
   return `Visiteur ${conversation.session_id.slice(0, 8)}`;
 }
 
 function getStatusLabel(status: Conversation["status"]) {
   if (status === "ai_active") return "IA active";
   if (status === "waiting_human") return "En attente d’un humain";
+  if (status === "human_needed") return "À traiter";
   if (status === "human_active") return "Pris en charge";
   if (status === "closed") return "Fermée";
+  if (status === "deleted") return "Supprimée";
+
   return status;
 }
 
 function getRoleLabel(role: string) {
   if (role === "user") return "Client";
+  if (role === "customer") return "Client";
   if (role === "assistant") return "Assistant IA";
   if (role === "staff") return "Équipe Microtec";
+
   return role;
 }
 
@@ -51,6 +78,7 @@ export function ConversationPanel({
   onTake,
   onReply,
   onClose,
+  onDelete,
 }: Props) {
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
@@ -102,18 +130,18 @@ export function ConversationPanel({
     return (
       <main className="conversation-panel empty-panel">
         <div className="empty-panel-card">
-          <div className="empty-icon">💬</div>
+          <div className="empty-icon">◎</div>
           <h1>Sélectionne une discussion</h1>
           <p>
-            Les messages du chatbot, de Messenger et des autres canaux vont
-            apparaître ici.
+            Tous les messages clients vont apparaître ici : Web, Shopify,
+            Messenger, Instagram et courriel.
           </p>
         </div>
       </main>
     );
   }
 
-  const source = conversation.source || "website";
+  const source = normalizeSource(conversation.source);
   const name = getConversationName(conversation);
 
   return (
@@ -149,7 +177,9 @@ export function ConversationPanel({
         </div>
 
         <div className="panel-actions">
-          {conversation.status === "waiting_human" && (
+          {(conversation.status === "waiting_human" ||
+            conversation.status === "human_needed" ||
+            conversation.status === "ai_active") && (
             <button className="primary-btn" onClick={onTake}>
               Prendre la discussion
             </button>
@@ -158,6 +188,12 @@ export function ConversationPanel({
           {conversation.status !== "closed" && (
             <button className="danger-btn" onClick={onClose}>
               Fermer
+            </button>
+          )}
+
+          {conversation.status === "closed" && (
+            <button className="delete-btn" onClick={onDelete}>
+              Supprimer
             </button>
           )}
         </div>
@@ -195,9 +231,16 @@ export function ConversationPanel({
         </div>
       </section>
 
+      {conversation.subject && (
+        <section className="conversation-subject-panel">
+          <span>Sujet</span>
+          <strong>{conversation.subject}</strong>
+        </section>
+      )}
+
       <section className="messages">
         {conversation.messages.map((msg, index) => (
-          <div key={index} className={`message ${msg.role}`}>
+          <div key={msg.id || index} className={`message ${msg.role}`}>
             <span>
               {msg.role === "staff"
                 ? msg.staff_name || getRoleLabel(msg.role)
@@ -229,6 +272,12 @@ export function ConversationPanel({
             Prends la discussion pour pouvoir répondre au client.
           </footer>
         )}
+
+      {conversation.status === "closed" && (
+        <footer className="locked-reply-box closed">
+          Discussion fermée. Tu peux la supprimer si elle n’est plus nécessaire.
+        </footer>
+      )}
     </main>
   );
 }

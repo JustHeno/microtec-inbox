@@ -1,0 +1,104 @@
+#microtec-chatbot-window {
+  position: fixed;
+
+  right: 24px;
+  bottom: 84px;
+
+  width: 390px;
+  height: 560px;
+
+  max-width: calc(100vw - 24px);
+  max-height: calc(100vh - 110px);
+
+  display: none;
+  flex-direction: column;
+
+  overflow: hidden;
+
+  z-index: 999999;
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(255,255,255,.96),
+      rgba(252,253,255,.98)
+    );
+
+  backdrop-filter: blur(20px);
+
+  border-radius: 24px;
+
+  border: 1px solid rgba(18,79,131,.08);
+
+  box-shadow:
+    0 40px 100px rgba(15,65,109,.18),
+    0 18px 40px rgba(0,0,0,.10),
+    0 1px 0 rgba(255,255,255,.9) inset;
+
+  transform-origin: bottom right;
+
+  isolation: isolate;
+}
+
+#microtec-chatbot-window::before {
+  content: "";
+
+  position: absolute;
+  inset: 0;
+
+  pointer-events: none;
+
+  background:
+    radial-gradient(
+      circle at top right,
+      rgba(18,79,131,.05),
+      transparent 40%
+    ),
+    radial-gradient(
+      circle at bottom left,
+      rgba(229,112,11,.04),
+      transparent 35%
+    );
+
+  z-index: 0;
+}
+
+#microtec-chatbot-window > * {
+  position: relative;
+  z-index: 2;
+}
+
+#microtec-chatbot-window.is-open {
+  display: flex;
+
+  animation: microtecChatOpen .28s cubic-bezier(.16,1,.3,1);
+}
+
+@keyframes microtecChatOpen {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(.94);
+    filter: blur(4px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+  }
+}
+
+@media (max-width: 768px) {
+  #microtec-chatbot-window {
+    right: 10px;
+    left: 10px;
+
+    width: auto;
+
+    height: calc(100vh - 90px);
+
+    bottom: 74px;
+
+    border-radius: 22px;
+  }
+}

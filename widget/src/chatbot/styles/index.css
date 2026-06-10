@@ -1,0 +1,26 @@
+@import url("https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700;800&display=swap");
+
+@import "./ChatButton.css";
+@import "./ChatWindow.css";
+@import "./ChatHeader.css";
+@import "./ChatMessages.css";
+@import "./ChatForm.css";
+@import "./Utilities.css";
+
+#microtec-chatbot-root,
+#microtec-chatbot-root * {
+  box-sizing: border-box;
+
+  font-family:
+    "Barlow",
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  text-rendering: optimizeLegibility;
+}

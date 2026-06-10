@@ -1,0 +1,131 @@
+#microtec-chatbot-form {
+  position: relative;
+
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  padding: 16px 18px 18px;
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(255,255,255,.92),
+      rgba(255,255,255,.98)
+    );
+
+  border-top: 1px solid rgba(18,79,131,.06);
+
+  backdrop-filter: blur(12px);
+}
+
+#microtec-chatbot-input {
+  flex: 1;
+
+  height: 48px;
+
+  padding: 0 18px;
+
+  border: 1px solid rgba(18,79,131,.08);
+  border-radius: 999px;
+
+  background: #f7fafc;
+
+  color: #0b3457;
+
+  font-size: 13.5px;
+  font-weight: 500;
+
+  outline: none;
+
+  transition:
+    border-color .18s ease,
+    box-shadow .18s ease,
+    background .18s ease;
+}
+
+#microtec-chatbot-input::placeholder {
+  color: rgba(11,52,87,.45);
+}
+
+#microtec-chatbot-input:focus {
+  background: #ffffff;
+
+  border-color: rgba(18,79,131,.30);
+
+  box-shadow:
+    0 0 0 4px rgba(18,79,131,.08);
+}
+
+#microtec-chatbot-submit {
+  width: 48px;
+  height: 48px;
+
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: none;
+  border-radius: 50%;
+
+  cursor: pointer;
+
+  color: white;
+
+  background:
+    linear-gradient(
+      135deg,
+      #124f83 0%,
+      #0b3457 100%
+    );
+
+  box-shadow:
+    0 10px 24px rgba(18,79,131,.22);
+
+  transition:
+    transform .18s ease,
+    box-shadow .18s ease;
+}
+
+#microtec-chatbot-submit:hover {
+  transform: translateY(-2px);
+
+  box-shadow:
+    0 16px 32px rgba(18,79,131,.28);
+}
+
+#microtec-chatbot-submit:active {
+  transform: scale(.95);
+}
+
+#microtec-chatbot-submit:disabled {
+  opacity: .65;
+  cursor: not-allowed;
+}
+
+#microtec-chatbot-submit svg {
+  width: 18px;
+  height: 18px;
+
+  stroke-width: 2.4;
+}
+
+.microtec-submit-loader {
+  width: 16px;
+  height: 16px;
+
+  border-radius: 50%;
+
+  border: 2px solid rgba(255,255,255,.25);
+  border-top-color: #fff;
+
+  animation: microtecSpin .7s linear infinite;
+}
+
+@keyframes microtecSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}

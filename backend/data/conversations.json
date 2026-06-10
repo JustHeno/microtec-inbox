@@ -1,0 +1,192 @@
+[
+  {
+    "session_id": "ee4bd2ab-e6ef-44d1-9ff9-05e3f66a9b1e",
+    "status": "closed",
+    "priority": "medium",
+    "reason": "human_requested",
+    "visitor": {
+      "name": null,
+      "email": null,
+      "phone": "819-350-4139"
+    },
+    "messages": [
+      {
+        "role": "user",
+        "content": "Bonjour",
+        "created_at": "2026-06-10T14:13:33.867748"
+      },
+      {
+        "role": "assistant",
+        "content": "Bonjour! Comment je peux vous aider aujourd’hui?",
+        "created_at": "2026-06-10T14:13:33.892052"
+      },
+      {
+        "role": "user",
+        "content": "J'ai plusiers question",
+        "created_at": "2026-06-10T14:13:40.670377"
+      },
+      {
+        "role": "assistant",
+        "content": "Bonjour ! Je suis ravi de vous aider. Quelle est votre première question ? Est-ce que vous avez un problème technique ou cherchez des informations sur un produit spécifique ?",
+        "created_at": "2026-06-10T14:13:55.482961"
+      },
+      {
+        "role": "user",
+        "content": "c'est quoi ton modèle AI",
+        "created_at": "2026-06-10T14:14:44.877191"
+      },
+      {
+        "role": "assistant",
+        "content": "Bonjour ! Je suis ravi de vous aider. Vous cherchez à savoir ce que c'est que mon modèle AI ? Eh bien, je vais vous dire qu'il s'agit d'une technologie qui me permet de comprendre et de répondre à vos questions de manière plus intelligente et personnelle. Cela signifie que je peux vous fournir des réponses plus précises et plus utiles, tout en étant toujours naturel et convivial. Mais pour savoir si cela correspond à vos besoins spécifiques, j'aimerais savoir : qu'est-ce que vous cherchez à faire avec votre ordinateur ou votre appareil ?",
+        "created_at": "2026-06-10T14:14:54.831664"
+      },
+      {
+        "role": "user",
+        "content": "non mais tu es quoi openai, gemini omalla?",
+        "created_at": "2026-06-10T14:15:12.295888"
+      },
+      {
+        "role": "assistant",
+        "content": "Bonjour ! Je suis Microtec Assistant, l'assistant conversationnel de Microtec Performance Informatique. Je suis là pour vous aider avec vos questions et besoins en matière d'informatique. Qu'est-ce que je peux faire pour vous aujourd'hui ?",
+        "created_at": "2026-06-10T14:15:17.831125"
+      },
+      {
+        "role": "user",
+        "content": "J'aimerais parler à un agent",
+        "created_at": "2026-06-10T15:26:37.500160"
+      },
+      {
+        "role": "assistant",
+        "content": "Bienvenue chez Microtec Performance Informatique ! Je suis ravi de vous aider. Qu'est-ce que vous souhaitez discuter aujourd'hui ? Avez-vous un problème technique ou des questions sur notre produit ?",
+        "created_at": "2026-06-10T15:26:52.114994"
+      },
+      {
+        "role": "user",
+        "content": "oui j'aimerais acheter un ordinateur",
+        "created_at": "2026-06-10T15:27:05.753753"
+      },
+      {
+        "role": "assistant",
+        "content": "Parfait 👍 Nous avons avisé un membre de notre équipe.\n\nEn attendant, je peux continuer à vous aider ici et transmettre toutes les informations au conseiller qui prendra la discussion.\n\nPour qu’on puisse vous rejoindre si personne n’est disponible immédiatement, pouvez-vous me laisser votre prénom, nom, numéro de téléphone ou courriel?",
+        "created_at": "2026-06-10T15:27:05.795840"
+      },
+      {
+        "role": "user",
+        "content": "Oui!",
+        "created_at": "2026-06-10T15:27:29.592213"
+      },
+      {
+        "role": "assistant",
+        "content": "Bonjour ! Je suis ravi de vous aider. Comment puis-je vous aider aujourd'hui ? Avez-vous un problème technique ou une question sur votre appareil informatique ?",
+        "created_at": "2026-06-10T15:27:34.004933"
+      },
+      {
+        "role": "user",
+        "content": "Justin Hénault 819-350-4139",
+        "created_at": "2026-06-10T15:27:46.506971"
+      },
+      {
+        "role": "assistant",
+        "content": "Bonjour Justin ! Je suis ravi de vous aider. Pouvez-vous me dire un peu plus sur le problème que vous rencontrez avec votre ordinateur ou votre appareil ? Qu'est-ce qui ne va pas exactement ?",
+        "created_at": "2026-06-10T15:27:51.650034"
+      },
+      {
+        "role": "staff",
+        "content": "Bonjour Justin! Comment est-ce que je peux vous aider?",
+        "created_at": "2026-06-10T15:28:15.034030",
+        "staff_name": "Justin Hénault"
+      },
+      {
+        "role": "user",
+        "content": "Oui j'aimerais faire une soumission d'un ordinateur",
+        "created_at": "2026-06-10T15:28:37.312975"
+      },
+      {
+        "role": "staff",
+        "content": "D'accord! Quelle Type d'ordinateur vous voulez? Ce que je veux dire c'est que qu'est-ce que vous allez faire avec votre ordinateur? Vous allez plutôt Jouer dessus? Travailler?",
+        "created_at": "2026-06-10T15:31:05.052683",
+        "staff_name": "Justin Hénault"
+      },
+      {
+        "role": "staff",
+        "content": "rrrrrrrrreeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+        "created_at": "2026-06-10T15:39:46.115194",
+        "staff_name": "Justin Hénault"
+      },
+      {
+        "role": "staff",
+        "content": "Est-ce que vous pouvez directement venir en magasin? Je pense que ça pourrais être clairement plus facile? Qu'en pensez-vous?",
+        "created_at": "2026-06-10T15:42:39.053643",
+        "staff_name": "Justin Hénault"
+      },
+      {
+        "role": "user",
+        "content": "Oui",
+        "created_at": "2026-06-10T15:42:53.531357"
+      },
+      {
+        "role": "user",
+        "content": "rf",
+        "created_at": "2026-06-10T15:43:02.585115"
+      }
+    ],
+    "created_at": "2026-06-10T13:57:52.871958",
+    "updated_at": "2026-06-10T15:43:02.585132",
+    "staff_typing": false,
+    "staff_typing_name": null
+  },
+  {
+    "session_id": "e599751a-e021-4a13-8104-de6039180548",
+    "status": "human_active",
+    "priority": "medium",
+    "reason": "sales_opportunity",
+    "staff_typing": false,
+    "staff_typing_name": null,
+    "visitor": {
+      "name": null,
+      "email": null,
+      "phone": null
+    },
+    "messages": [
+      {
+        "role": "user",
+        "content": "Bonjour",
+        "created_at": "2026-06-10T15:47:33.156135"
+      },
+      {
+        "role": "assistant",
+        "content": "Bonjour! Comment je peux vous aider aujourd’hui?",
+        "created_at": "2026-06-10T15:47:33.175888"
+      },
+      {
+        "role": "user",
+        "content": "J'aurais une question concernant  les prix des ordinateur afficher sur le site",
+        "created_at": "2026-06-10T15:47:53.491298"
+      },
+      {
+        "role": "assistant",
+        "content": "Bonjour ! Je suis ravi de vous aider. Pour obtenir le prix d'un ordinateur spécifique sur notre site, je vais avoir besoin de savoir quel type d'ordinateur vous recherchez exactement. Pouvez-vous me donner plus de détails sur les caractéristiques que vous cherchez ? Quel est votre budget et qu'est-ce que vous allez utiliser l'ordinateur pour ?\n\nUn conseiller pourra confirmer les détails avec vous au besoin.\n\nUn membre de notre équipe pourrait aussi vous aider directement avec ça. Voulez-vous qu’on prenne le relais?\n\nSi oui, vous pourrez aussi nous laisser votre prénom, nom, téléphone ou courriel pour qu’on puisse vous rejoindre au besoin.",
+        "created_at": "2026-06-10T15:48:08.612295"
+      },
+      {
+        "role": "staff",
+        "content": "Bonjour je m'appelle Justin, Comment est-ce que je peux vous aider aujourd'hui?",
+        "created_at": "2026-06-10T15:48:58.655910",
+        "staff_name": "Justin Hénault"
+      },
+      {
+        "role": "user",
+        "content": "Oui comme j'ai dis plus haut j'aimerais avoir une soumission",
+        "created_at": "2026-06-10T15:49:27.506094"
+      },
+      {
+        "role": "staff",
+        "content": "D'accord Je comprends et vous la voudrez pour quelle raison? Ce que je veux dire c'est que dans quelle contexte vous voulez une soumission? vous la voulez pour??",
+        "created_at": "2026-06-10T15:50:16.645513",
+        "staff_name": "Justin Hénault"
+      }
+    ],
+    "created_at": "2026-06-10T15:47:33.137772",
+    "updated_at": "2026-06-10T15:50:16.680635"
+  }
+]

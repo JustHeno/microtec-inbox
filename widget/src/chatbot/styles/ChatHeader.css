@@ -1,0 +1,184 @@
+#microtec-chatbot-header {
+  position: relative;
+
+  min-height: 72px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 14px 16px;
+
+  overflow: hidden;
+
+  color: #fff;
+
+  background:
+    radial-gradient(circle at 12% 0%, rgba(255,255,255,.18), transparent 32%),
+    linear-gradient(135deg, #124f83 0%, #0f416d 52%, #082f4f 100%);
+
+  border-bottom: 1px solid rgba(255,255,255,.10);
+}
+
+#microtec-chatbot-header::after {
+  content: "";
+
+  position: absolute;
+  left: 16px;
+  right: 16px;
+  bottom: 0;
+
+  height: 1px;
+
+  background:
+    linear-gradient(
+      90deg,
+      transparent,
+      rgba(255,255,255,.24),
+      transparent
+    );
+}
+
+.microtec-header-left {
+  position: relative;
+  z-index: 2;
+
+  display: flex;
+  align-items: center;
+  gap: 11px;
+
+  min-width: 0;
+}
+
+/* Remplace l'image par un badge clean */
+.microtec-header-avatar {
+  width: 40px;
+  height: 40px;
+
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 13px;
+
+  object-fit: cover;
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(255,255,255,.96),
+      rgba(235,244,252,.92)
+    );
+
+  border: 1px solid rgba(255,255,255,.70);
+
+  box-shadow:
+    0 10px 22px rgba(0,0,0,.18),
+    inset 0 1px 0 rgba(255,255,255,.95);
+}
+
+/* Cache l'image si tu gardes encore le <img> dans ton TS */
+.microtec-header-avatar[src] {
+  padding: 7px;
+}
+
+/* Option si tu remplaces le <img> par <div class="microtec-header-avatar">M</div> */
+.microtec-header-avatar:not(img) {
+  color: #124f83;
+
+  font-size: 16px;
+  font-weight: 800;
+  letter-spacing: -.04em;
+}
+
+.microtec-header-info {
+  min-width: 0;
+}
+
+.microtec-header-title {
+  font-size: 13.5px;
+  font-weight: 700;
+
+  line-height: 1.15;
+  letter-spacing: -.01em;
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.microtec-header-status {
+  margin-top: 4px;
+
+  display: flex;
+  align-items: center;
+  gap: 6px;
+
+  font-size: 11px;
+  font-weight: 500;
+
+  color: rgba(255,255,255,.72);
+
+  white-space: nowrap;
+}
+
+.microtec-header-status::before {
+  content: "";
+
+  width: 7px;
+  height: 7px;
+
+  flex-shrink: 0;
+
+  border-radius: 50%;
+
+  background: #22c55e;
+
+  box-shadow:
+    0 0 0 3px rgba(34,197,94,.14),
+    0 0 10px rgba(34,197,94,.42);
+}
+
+.microtec-header-close {
+  position: relative;
+  z-index: 2;
+
+  width: 32px;
+  height: 32px;
+
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: 1px solid rgba(255,255,255,.12);
+  border-radius: 999px;
+
+  background: rgba(255,255,255,.10);
+
+  color: white;
+
+  font-size: 19px;
+  line-height: 1;
+
+  cursor: pointer;
+
+  transition:
+    transform .18s ease,
+    background .18s ease,
+    border-color .18s ease;
+}
+
+.microtec-header-close:hover {
+  transform: translateY(-1px);
+
+  background: rgba(255,255,255,.16);
+  border-color: rgba(255,255,255,.22);
+}
+
+.microtec-header-close:active {
+  transform: scale(.94);
+}

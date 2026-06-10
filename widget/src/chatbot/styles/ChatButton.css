@@ -1,0 +1,134 @@
+#microtec-chatbot-button {
+  position: fixed;
+
+  right: 20px;
+  bottom: 20px;
+
+  width: 48px;
+  height: 48px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 0;
+
+  border: none;
+  border-radius: 50%;
+
+  cursor: pointer;
+
+  z-index: 999999;
+
+  background:
+    linear-gradient(
+      135deg,
+      #124f83 0%,
+      #0b3457 100%
+    );
+
+  box-shadow:
+    0 10px 24px rgba(18,79,131,.20),
+    0 4px 10px rgba(0,0,0,.10);
+
+  transition:
+    transform .18s ease,
+    box-shadow .18s ease;
+}
+
+#microtec-chatbot-button:hover {
+  transform: translateY(-2px);
+
+  box-shadow:
+    0 16px 32px rgba(18,79,131,.26),
+    0 6px 14px rgba(0,0,0,.12);
+}
+
+#microtec-chatbot-button:active {
+  transform: scale(.94);
+}
+
+#microtec-chatbot-button svg {
+  width: 18px;
+  height: 18px;
+
+  color: #fff;
+
+  stroke-width: 2.2;
+
+  transition:
+    transform .18s ease;
+}
+
+#microtec-chatbot-button:hover svg {
+  transform: scale(1.08);
+}
+
+#microtec-chatbot-avatar {
+  display: none;
+}
+
+#microtec-chatbot-button .online-dot {
+  position: absolute;
+
+  right: 1px;
+  bottom: 1px;
+
+  width: 9px;
+  height: 9px;
+
+  border-radius: 50%;
+
+  background: #22c55e;
+
+  border: 2px solid #fff;
+
+  box-shadow:
+    0 0 0 2px rgba(34,197,94,.12),
+    0 0 8px rgba(34,197,94,.30);
+}
+
+#microtec-chatbot-button .online-dot::before {
+  content: "";
+
+  position: absolute;
+  inset: -4px;
+
+  border-radius: inherit;
+
+  border: 1px solid rgba(34,197,94,.22);
+
+  animation: microtecOnlinePulse 2.2s ease-out infinite;
+}
+
+@keyframes microtecOnlinePulse {
+  from {
+    transform: scale(.8);
+    opacity: .8;
+  }
+
+  to {
+    transform: scale(1.8);
+    opacity: 0;
+  }
+}
+
+@media (max-width: 768px) {
+  #microtec-chatbot-button {
+    width: 46px;
+    height: 46px;
+
+    right: 16px;
+    bottom: 16px;
+  }
+
+  #microtec-chatbot-button svg {
+    width: 17px;
+    height: 17px;
+  }
+
+  #microtec-chatbot-button .online-dot {
+    width: 8px;
+    height: 8px;
+  }
+}

@@ -62,6 +62,8 @@ function App() {
 
         if (updatedSelected) {
           setSelected(updatedSelected);
+        } else {
+          setSelected(null);
         }
       }
 
@@ -104,6 +106,29 @@ function App() {
 
     const updated = await StaffApi.closeConversation(selected.session_id);
     setSelected(updated);
+    await loadConversations();
+  }
+
+  async function handleDelete() {
+    if (!selected) return;
+
+    if (selected.status !== "closed") {
+      setError("Tu peux seulement supprimer une conversation fermée.");
+      return;
+    }
+
+    const confirmed = window.confirm(
+      "Supprimer cette conversation fermée de l’inbox?"
+    );
+
+    if (!confirmed) return;
+
+    const updated = await StaffApi.deleteConversation(selected.session_id);
+
+    if (updated.status === "deleted") {
+      setSelected(null);
+    }
+
     await loadConversations();
   }
 
@@ -160,7 +185,7 @@ function App() {
           <div className="topbar-logo">M</div>
           <div>
             <strong>Microtec Inbox</strong>
-            <span>Chatbot · Messenger · Support client</span>
+            <span>Web · Shopify · Messenger · Instagram · Courriel</span>
           </div>
         </div>
 
@@ -184,6 +209,7 @@ function App() {
           onTake={handleTake}
           onReply={handleReply}
           onClose={handleClose}
+          onDelete={handleDelete}
         />
 
         {error && <div className="error-toast">{error}</div>}

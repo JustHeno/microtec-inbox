@@ -18,10 +18,18 @@ class ConversationService:
         if not self.file_path.exists():
             self._save([])
 
+    def _now(self) -> str:
+        return datetime.now().isoformat()
+
     def _load(self) -> list[dict]:
         try:
             content = self.file_path.read_text(encoding="utf-8").strip()
-            return json.loads(content) if content else []
+            conversations = json.loads(content) if content else []
+
+            for conv in conversations:
+                self._ensure_defaults(conv)
+
+            return conversations
         except Exception:
             return []
 
@@ -32,25 +40,50 @@ class ConversationService:
         )
 
     def list_conversations(self) -> list[dict]:
-        return self._load()
+        conversations = self._load()
 
-    def get_or_create(self, session_id: str | None = None) -> dict:
+        return [
+            conv
+            for conv in conversations
+            if conv.get("status") != "deleted"
+        ]
+
+    def get_by_session_id(self, session_id: str) -> dict | None:
+        conversations = self._load()
+
+        for conv in conversations:
+            if conv.get("session_id") == session_id:
+                self._ensure_defaults(conv)
+                return conv
+
+        return None
+
+    def get_or_create(
+        self,
+        session_id: str | None = None,
+        source: str = "website",
+    ) -> dict:
         conversations = self._load()
 
         if session_id:
             for conv in conversations:
-                if conv["session_id"] == session_id:
+                if conv.get("session_id") == session_id:
                     self._ensure_defaults(conv)
                     self._save(conversations)
                     return conv
 
-        now = datetime.now().isoformat()
+        now = self._now()
 
         new_conv = {
             "session_id": session_id or str(uuid.uuid4()),
+            "source": source,
             "status": "ai_active",
             "priority": "low",
             "reason": None,
+            "subject": None,
+            "assigned_to": None,
+            "closed_at": None,
+            "deleted_at": None,
             "staff_typing": False,
             "staff_typing_name": None,
             "visitor": {
@@ -68,6 +101,52 @@ class ConversationService:
 
         return new_conv
 
+    def create_from_contact_form(
+        self,
+        name: str,
+        email: str,
+        subject: str,
+        message: str,
+        source: str = "shopify_contact",
+        phone: str | None = None,
+    ) -> dict:
+        conversations = self._load()
+        now = self._now()
+
+        conversation = {
+            "session_id": f"{source}_{uuid.uuid4().hex}",
+            "source": source,
+            "status": "human_needed",
+            "priority": "medium",
+            "reason": "contact_form",
+            "subject": subject.strip() if subject else None,
+            "assigned_to": None,
+            "closed_at": None,
+            "deleted_at": None,
+            "staff_typing": False,
+            "staff_typing_name": None,
+            "visitor": {
+                "name": name.strip() if name else None,
+                "email": email.strip() if email else None,
+                "phone": phone.strip() if phone else None,
+            },
+            "messages": [
+                {
+                    "id": uuid.uuid4().hex,
+                    "role": "customer",
+                    "content": message.strip(),
+                    "created_at": now,
+                }
+            ],
+            "created_at": now,
+            "updated_at": now,
+        }
+
+        conversations.append(conversation)
+        self._save(conversations)
+
+        return conversation
+
     def add_message(
         self,
         session_id: str,
@@ -78,20 +157,21 @@ class ConversationService:
         conversations = self._load()
 
         for conv in conversations:
-            if conv["session_id"] == session_id:
+            if conv.get("session_id") == session_id:
                 self._ensure_defaults(conv)
 
                 message = {
+                    "id": uuid.uuid4().hex,
                     "role": role,
                     "content": content,
-                    "created_at": datetime.now().isoformat(),
+                    "created_at": self._now(),
                 }
 
                 if role == "staff" and staff_name:
                     message["staff_name"] = staff_name
 
                 conv["messages"].append(message)
-                conv["updated_at"] = datetime.now().isoformat()
+                conv["updated_at"] = self._now()
 
                 self._save(conversations)
                 return conv
@@ -115,10 +195,13 @@ class ConversationService:
         conversations = self._load()
 
         for conv in conversations:
-            if conv["session_id"] == session_id:
+            if conv.get("session_id") == session_id:
                 self._ensure_defaults(conv)
 
                 conv["status"] = status
+
+                if status == "closed":
+                    conv["closed_at"] = self._now()
 
                 if priority:
                     conv["priority"] = priority
@@ -126,7 +209,28 @@ class ConversationService:
                 if reason is not None:
                     conv["reason"] = reason
 
-                conv["updated_at"] = datetime.now().isoformat()
+                conv["updated_at"] = self._now()
+
+                self._save(conversations)
+                return conv
+
+        raise ValueError("Conversation introuvable")
+
+    def delete(self, session_id: str) -> dict:
+        conversations = self._load()
+
+        for conv in conversations:
+            if conv.get("session_id") == session_id:
+                self._ensure_defaults(conv)
+
+                if conv.get("status") != "closed":
+                    raise ValueError(
+                        "Seules les conversations fermées peuvent être supprimées"
+                    )
+
+                conv["status"] = "deleted"
+                conv["deleted_at"] = self._now()
+                conv["updated_at"] = self._now()
 
                 self._save(conversations)
                 return conv
@@ -142,12 +246,12 @@ class ConversationService:
         conversations = self._load()
 
         for conv in conversations:
-            if conv["session_id"] == session_id:
+            if conv.get("session_id") == session_id:
                 self._ensure_defaults(conv)
 
                 conv["staff_typing"] = is_typing
                 conv["staff_typing_name"] = staff_name if is_typing else None
-                conv["updated_at"] = datetime.now().isoformat()
+                conv["updated_at"] = self._now()
 
                 self._save(conversations)
                 return conv
@@ -164,7 +268,7 @@ class ConversationService:
         conversations = self._load()
 
         for conv in conversations:
-            if conv["session_id"] == session_id:
+            if conv.get("session_id") == session_id:
                 self._ensure_defaults(conv)
 
                 if name:
@@ -176,7 +280,7 @@ class ConversationService:
                 if phone:
                     conv["visitor"]["phone"] = phone
 
-                conv["updated_at"] = datetime.now().isoformat()
+                conv["updated_at"] = self._now()
 
                 self._save(conversations)
                 return conv
@@ -218,10 +322,22 @@ class ConversationService:
         return self.get_or_create(session_id)
 
     def _ensure_defaults(self, conv: dict) -> None:
+        conv.setdefault("session_id", str(uuid.uuid4()))
+        conv.setdefault("source", "website")
+        conv.setdefault("status", "ai_active")
+        conv.setdefault("priority", "low")
+        conv.setdefault("reason", None)
+        conv.setdefault("subject", None)
+        conv.setdefault("assigned_to", None)
+        conv.setdefault("closed_at", None)
+        conv.setdefault("deleted_at", None)
         conv.setdefault("staff_typing", False)
         conv.setdefault("staff_typing_name", None)
+        conv.setdefault("messages", [])
+        conv.setdefault("created_at", self._now())
+        conv.setdefault("updated_at", self._now())
 
-        if "visitor" not in conv:
+        if "visitor" not in conv or not isinstance(conv["visitor"], dict):
             conv["visitor"] = {
                 "name": None,
                 "email": None,
@@ -232,11 +348,16 @@ class ConversationService:
         conv["visitor"].setdefault("email", None)
         conv["visitor"].setdefault("phone", None)
 
+        for message in conv["messages"]:
+            message.setdefault("id", uuid.uuid4().hex)
+            message.setdefault("created_at", self._now())
+
     def _extract_email(self, text: str) -> str | None:
         match = re.search(
             r"[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+",
             text,
         )
+
         return match.group(0) if match else None
 
     def _extract_phone(self, text: str) -> str | None:
@@ -244,6 +365,7 @@ class ConversationService:
             r"(\+?1[\s.-]?)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}",
             text,
         )
+
         return match.group(0) if match else None
 
     def _extract_name(self, text: str) -> str | None:

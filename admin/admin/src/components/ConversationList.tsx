@@ -8,30 +8,66 @@ type Props = {
   onSelect: (conversation: Conversation) => void;
 };
 
+const SOURCES: Array<{
+  key: "all" | ConversationSource;
+  label: string;
+  icon: string;
+}> = [
+  { key: "all", label: "Tout", icon: "◎" },
+  { key: "website", label: "Web", icon: "🌐" },
+  { key: "shopify_contact", label: "Shopify", icon: "🛒" },
+  { key: "facebook", label: "Messenger", icon: "f" },
+  { key: "instagram", label: "Instagram", icon: "◉" },
+  { key: "email", label: "Courriel", icon: "✉" },
+];
+
+function normalizeSource(source?: ConversationSource): ConversationSource {
+  if (!source || source === "web") return "website";
+  return source;
+}
+
 function getSourceLabel(source?: ConversationSource) {
-  if (source === "facebook") return "Messenger";
-  if (source === "instagram") return "Instagram";
-  if (source === "website") return "Chatbot site";
+  const normalized = normalizeSource(source);
+
+  if (normalized === "facebook") return "Messenger";
+  if (normalized === "instagram") return "Instagram";
+  if (normalized === "website") return "Web / Chatbot";
+  if (normalized === "shopify_contact") return "Formulaire Shopify";
+  if (normalized === "email") return "Courriel";
+
   return "Inconnu";
 }
 
 function getSourceIcon(source?: ConversationSource) {
-  if (source === "facebook") return "f";
-  if (source === "instagram") return "◎";
-  if (source === "website") return "💬";
+  const normalized = normalizeSource(source);
+
+  if (normalized === "facebook") return "f";
+  if (normalized === "instagram") return "◉";
+  if (normalized === "website") return "🌐";
+  if (normalized === "shopify_contact") return "🛒";
+  if (normalized === "email") return "✉";
+
   return "?";
 }
 
 function getConversationName(conversation: Conversation) {
   if (conversation.customer_name) return conversation.customer_name;
-  if (conversation.source === "facebook") return "Client Messenger";
-  if (conversation.source === "instagram") return "Client Instagram";
+  if (conversation.visitor?.name) return conversation.visitor.name;
+
+  const source = normalizeSource(conversation.source);
+
+  if (source === "facebook") return "Client Messenger";
+  if (source === "instagram") return "Client Instagram";
+  if (source === "shopify_contact") return "Client Shopify";
+  if (source === "email") return conversation.visitor?.email || "Contact courriel";
+
   return `Visiteur ${conversation.session_id.slice(0, 8)}`;
 }
 
 function getLastMessage(conversation: Conversation) {
   return (
     conversation.messages[conversation.messages.length - 1]?.content ||
+    conversation.subject ||
     "Nouvelle conversation"
   );
 }
@@ -39,8 +75,11 @@ function getLastMessage(conversation: Conversation) {
 function getStatusLabel(status: Conversation["status"]) {
   if (status === "ai_active") return "IA";
   if (status === "waiting_human") return "À prendre";
+  if (status === "human_needed") return "À traiter";
   if (status === "human_active") return "Humain";
   if (status === "closed") return "Fermée";
+  if (status === "deleted") return "Supprimée";
+
   return status;
 }
 
@@ -51,25 +90,24 @@ export function ConversationList({
   onSourceChange,
   onSelect,
 }: Props) {
+  const visibleConversations = conversations.filter(
+    (conversation) => conversation.status !== "deleted"
+  );
+
   const filtered =
     activeSource === "all"
-      ? conversations
-      : conversations.filter((conversation) => {
-          const source = conversation.source || "website";
-          return source === activeSource;
+      ? visibleConversations
+      : visibleConversations.filter((conversation) => {
+          return normalizeSource(conversation.source) === activeSource;
         });
 
-  const websiteCount = conversations.filter(
-    (conversation) => (conversation.source || "website") === "website"
-  ).length;
+  function countSource(source: "all" | ConversationSource) {
+    if (source === "all") return visibleConversations.length;
 
-  const facebookCount = conversations.filter(
-    (conversation) => conversation.source === "facebook"
-  ).length;
-
-  const instagramCount = conversations.filter(
-    (conversation) => conversation.source === "instagram"
-  ).length;
+    return visibleConversations.filter(
+      (conversation) => normalizeSource(conversation.source) === source
+    ).length;
+  }
 
   return (
     <aside className="conversation-list">
@@ -77,40 +115,27 @@ export function ConversationList({
         <div>
           <span className="eyebrow">Inbox centralisée</span>
           <h2>Discussions</h2>
-          <p>Chatbot, Messenger et autres canaux</p>
+          <p>Web · Shopify · Messenger · Instagram · Courriel</p>
         </div>
 
-        <span className="total-count">{conversations.length}</span>
+        <span className="total-count">{visibleConversations.length}</span>
       </div>
 
       <div className="source-filters">
-        <button
-          className={activeSource === "all" ? "active" : ""}
-          onClick={() => onSourceChange("all")}
-        >
-          Tout <span>{conversations.length}</span>
-        </button>
+        {SOURCES.map((source) => (
+          <button
+            key={source.key}
+            className={activeSource === source.key ? "active" : ""}
+            onClick={() => onSourceChange(source.key)}
+          >
+            <span className="filter-label">
+              <strong>{source.icon}</strong>
+              {source.label}
+            </span>
 
-        <button
-          className={activeSource === "website" ? "active" : ""}
-          onClick={() => onSourceChange("website")}
-        >
-          Website <span>{websiteCount}</span>
-        </button>
-
-        <button
-          className={activeSource === "facebook" ? "active" : ""}
-          onClick={() => onSourceChange("facebook")}
-        >
-          Messenger <span>{facebookCount}</span>
-        </button>
-
-        <button
-          className={activeSource === "instagram" ? "active" : ""}
-          onClick={() => onSourceChange("instagram")}
-        >
-          Instagram <span>{instagramCount}</span>
-        </button>
+            <span>{countSource(source.key)}</span>
+          </button>
+        ))}
       </div>
 
       {filtered.length === 0 && (
@@ -119,7 +144,7 @@ export function ConversationList({
 
       <div className="conversation-items">
         {filtered.map((conversation) => {
-          const source = conversation.source || "website";
+          const source = normalizeSource(conversation.source);
           const lastMessage = getLastMessage(conversation);
           const name = getConversationName(conversation);
 
@@ -166,6 +191,12 @@ export function ConversationList({
                   {getStatusLabel(conversation.status)}
                 </span>
               </div>
+
+              {conversation.subject && (
+                <div className="conversation-subject">
+                  {conversation.subject}
+                </div>
+              )}
 
               <p>{lastMessage}</p>
 

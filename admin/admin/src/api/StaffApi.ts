@@ -2,12 +2,16 @@ import { AuthApi } from "./AuthApi";
 
 export type ConversationSource =
   | "website"
+  | "web"
   | "facebook"
   | "instagram"
+  | "shopify_contact"
+  | "email"
   | "unknown";
 
 export type ChatMessage = {
-  role: "user" | "assistant" | "staff";
+  id?: string;
+  role: "user" | "customer" | "assistant" | "staff";
   content: string;
   created_at?: string;
   staff_name?: string;
@@ -15,9 +19,17 @@ export type ChatMessage = {
 
 export type Conversation = {
   session_id: string;
-  status: "ai_active" | "waiting_human" | "human_active" | "closed";
+  status:
+    | "ai_active"
+    | "waiting_human"
+    | "human_needed"
+    | "human_active"
+    | "closed"
+    | "deleted";
+
   priority?: "low" | "medium" | "high";
   reason?: string | null;
+  subject?: string | null;
 
   staff_typing?: boolean;
   staff_typing_name?: string | null;
@@ -63,9 +75,7 @@ export class StaffApi {
 
     await handleAuthError(res);
 
-    if (!res.ok) {
-      throw new Error("Erreur chargement conversations");
-    }
+    if (!res.ok) throw new Error("Erreur chargement conversations");
 
     return res.json();
   }
@@ -78,9 +88,7 @@ export class StaffApi {
 
     await handleAuthError(res);
 
-    if (!res.ok) {
-      throw new Error("Erreur prise de conversation");
-    }
+    if (!res.ok) throw new Error("Erreur prise de conversation");
 
     return res.json();
   }
@@ -94,9 +102,7 @@ export class StaffApi {
 
     await handleAuthError(res);
 
-    if (!res.ok) {
-      throw new Error("Erreur envoi réponse");
-    }
+    if (!res.ok) throw new Error("Erreur envoi réponse");
 
     return res.json();
   }
@@ -113,9 +119,7 @@ export class StaffApi {
 
     await handleAuthError(res);
 
-    if (!res.ok) {
-      throw new Error("Erreur typing");
-    }
+    if (!res.ok) throw new Error("Erreur typing");
 
     return res.json();
   }
@@ -128,9 +132,20 @@ export class StaffApi {
 
     await handleAuthError(res);
 
-    if (!res.ok) {
-      throw new Error("Erreur fermeture conversation");
-    }
+    if (!res.ok) throw new Error("Erreur fermeture conversation");
+
+    return res.json();
+  }
+
+  static async deleteConversation(sessionId: string): Promise<Conversation> {
+    const res = await fetch(`${API_URL}/staff/conversations/${sessionId}`, {
+      method: "DELETE",
+      headers: authHeaders(),
+    });
+
+    await handleAuthError(res);
+
+    if (!res.ok) throw new Error("Erreur suppression conversation");
 
     return res.json();
   }

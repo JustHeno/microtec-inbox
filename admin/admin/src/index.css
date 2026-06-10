@@ -765,3 +765,135 @@ button {
     grid-template-columns: repeat(2, 1fr);
   }
 }
+
+:root {
+  --shopify: #008060;
+  --email: #344054;
+  --web: #124f83;
+}
+
+.filter-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.filter-label strong {
+  font-size: 14px;
+  line-height: 1;
+}
+
+.conversation-item.source-shopify_contact::before {
+  background: var(--shopify);
+}
+
+.conversation-item.source-email::before {
+  background: var(--email);
+}
+
+.conversation-item.source-web::before,
+.conversation-item.source-website::before {
+  background: var(--web);
+}
+
+.conversation-avatar.fallback.shopify_contact,
+.panel-avatar.fallback.shopify_contact {
+  background: var(--shopify);
+}
+
+.conversation-avatar.fallback.email,
+.panel-avatar.fallback.email {
+  background: var(--email);
+}
+
+.source-badge.source-shopify_contact {
+  background: rgba(0, 128, 96, 0.1);
+  color: var(--shopify);
+}
+
+.source-badge.source-email {
+  background: rgba(52, 64, 84, 0.1);
+  color: var(--email);
+}
+
+.source-badge.source-web,
+.source-badge.source-website {
+  background: var(--soft-blue);
+  color: var(--blue);
+}
+
+.panel-header.source-shopify_contact {
+  border-top: 4px solid var(--shopify);
+}
+
+.panel-header.source-email {
+  border-top: 4px solid var(--email);
+}
+
+.panel-header.source-web,
+.panel-header.source-website {
+  border-top: 4px solid var(--blue);
+}
+
+.conversation-subject {
+  margin-top: 12px;
+  padding: 9px 11px;
+  border-radius: 12px;
+  background: #f8fafc;
+  border: 1px solid #edf1f5;
+  font-size: 13px;
+  font-weight: 900;
+  color: var(--text);
+}
+
+.conversation-subject-panel {
+  margin: 14px 28px 0;
+  padding: 14px 16px;
+  background: #ffffff;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+}
+
+.conversation-subject-panel span {
+  display: block;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 900;
+  margin-bottom: 5px;
+  text-transform: uppercase;
+}
+
+.conversation-subject-panel strong {
+  font-size: 15px;
+}
+
+.delete-btn {
+  border: none;
+  border-radius: 13px;
+  padding: 12px 16px;
+  font-weight: 900;
+  cursor: pointer;
+  background: var(--danger);
+  color: white;
+}
+
+.delete-btn:hover {
+  background: #7a1710;
+}
+
+.locked-reply-box.closed {
+  background: #f2f4f7;
+  border-top: 1px solid #d0d5dd;
+  color: #475467;
+}
+
+.message.customer {
+  margin-left: auto;
+  background: var(--blue);
+  color: white;
+  border-color: transparent;
+}
+
+.message.customer span {
+  color: rgba(255, 255, 255, 0.75);
+}

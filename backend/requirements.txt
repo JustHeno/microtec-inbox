@@ -5,3 +5,4 @@ pydantic
 requests
 python-jose
 passlib[bcrypt]
+pip install email-validator
